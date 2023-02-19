@@ -13,6 +13,7 @@ type Client struct {
 	Email     string
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Accounts  []*Account
 }
 
 func NewClient(name, email string) (*Client, error) {
@@ -39,6 +40,15 @@ func (c *Client) Update(name, email string) error {
 	if err := c.Validator(); err != nil {
 		return err
 	}
+	return nil
+}
+
+func (c *Client) AddAccount(account *Account) error {
+	if account.Client.ID != c.ID {
+		return errors.New("account does not belong to this client")
+	}
+	c.Accounts = append(c.Accounts, account)
+
 	return nil
 }
 
